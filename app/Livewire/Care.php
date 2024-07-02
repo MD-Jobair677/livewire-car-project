@@ -21,7 +21,20 @@ class Care extends Component
             'fuel_type' => 'required|min:3',
         ]);
 
+        $allcare = new AllCare;
+        $allcare ->care_name = $this->care_name ;
+        $allcare ->brand = $this->brand ;
+        $allcare ->engine_capacity = $this->engine_capacity ;
+        $allcare ->fuel_type = $this->fuel_type ;
+        $allcare->save();
+
+        session()->flash('status', 'Post successfully updated.');
         // AllCare::create($validated);
+        $this->reset(); 
+
+        return back();
+
+
     }
 
 
