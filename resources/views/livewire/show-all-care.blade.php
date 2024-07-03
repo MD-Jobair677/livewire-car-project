@@ -4,6 +4,10 @@
     <div class=" alert alert-success"> {{session('success')}}</div>
 @endif
 
+@livewire('search')
+
+
+
 
 <table  class="table  ">
   <thead>
@@ -27,14 +31,12 @@
       <td>{{$allcar->engine_capacity}}</td>
       <td>{{$allcar->fuel_type}}</td>
       <td> <a href="{{route('edit-care',$allcar->id)}}"><i class="fa-solid fa-pen-to-square" ></i></a>  </td>
-      <td><i class="fa-solid fa-trash" wire:click='delete({{$allcar->id}})'></i></td>
-      <button
-    type="button"
-    wire:click="delete"
-    wire:confirm="Are you sure you want to delete this post?"
->
-    Delete post 
-</button>
+     
+
+ <td>
+                    <i class="fa-solid fa-trash" wire:click="confirmDelete({{ $allcar->id }})" style="cursor: pointer;"></i>
+                </td>
+     
      
     </tr>
   @empty
@@ -45,4 +47,74 @@
   </tbody>
 </table>
  {{ $allCars->links() }}
+
+ <button id="delete"> delete</button>
 </div>
+
+
+@push('customjs')
+
+
+
+
+     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('show-delete-confirmation', function(event) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch('deleteConfirmed', event.detail.id);
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+    <script>
+       
+   $(document).ready(function(){
+    $('#delete').click(function(){
+   
+Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+    })
+   })
+    </script>
+  
+@endpush
